@@ -31,7 +31,7 @@ const projects = [
   {
     id: 4,
     title: "YOUR VISION",
-    category: "",
+    category: "OUR INTELLIGENCE",
     description: "We push boundaries in style, technique, and technology for next-gen digital art",
     image: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     tags: ["Phaser.js", "WebGL", "Pixel Art"]

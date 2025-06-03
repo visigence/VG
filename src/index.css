@@ -23,6 +23,13 @@
   
   .glass {
     @apply bg-opacity-10 bg-white backdrop-blur-md border border-white/20;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .glass:hover {
+    box-shadow: 0 8px 32px 0 rgba(134, 70, 242, 0.37);
+    border-color: theme('colors.accent.400/30');
   }
   
   .portfolio-card {
@@ -31,6 +38,42 @@
   
   .portfolio-card:hover {
     @apply neon-border transform scale-[1.02] z-10;
+  }
+
+  .service-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba(134, 70, 242, 0.1) 0%,
+      transparent 70%
+    );
+    transform: rotate(0deg);
+    transition: transform 0.5s ease-out;
+    pointer-events: none;
+  }
+
+  .service-card:hover::before {
+    transform: rotate(180deg);
+  }
+
+  .subtle-pattern-overlay {
+    background-image: radial-gradient(
+      rgba(134, 70, 242, 0.1) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
+    opacity: 0.5;
+    animation: patternFloat 20s linear infinite;
   }
 }
 
@@ -44,6 +87,15 @@
     box-shadow: 0 0 10px theme('colors.accent.500'), 
                 0 0 20px theme('colors.accent.500'), 
                 0 0 30px theme('colors.accent.500');
+  }
+}
+
+@keyframes patternFloat {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 32px 32px;
   }
 }
 
@@ -64,5 +116,9 @@
   .neon-border, .portfolio-card {
     animation: none;
     transition: none;
+  }
+
+  .subtle-pattern-overlay {
+    animation: none;
   }
 }

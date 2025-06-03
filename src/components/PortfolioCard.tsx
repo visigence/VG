@@ -65,12 +65,66 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ project }) => {
     };
   }, [isModalOpen]);
 
+  const cardVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.02 },
+    tap: { 
+      scale: 0.98,
+      transition: { 
+        type: "spring",
+        stiffness: 400,
+        damping: 30
+      }
+    }
+  };
+
+  const overlayVariants = {
+    rest: { opacity: 0 },
+    hover: { 
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const modalVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+      y: 20
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      transition: {
+        duration: 0.2,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <>
-      <div
+      <motion.div
         ref={tiltRef}
         className="portfolio-card h-[450px] group relative overflow-hidden cursor-pointer"
         onClick={() => setIsModalOpen(true)}
+        variants={cardVariants}
+        initial="rest"
+        whileHover="hover"
+        whileTap="tap"
         role="button"
         aria-haspopup="dialog"
         aria-expanded={isModalOpen}
@@ -85,11 +139,14 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ project }) => {
         <div className="relative h-full w-full overflow-hidden">
           <div className="shimmer-overlay absolute inset-0 z-10 opacity-0 group-hover:opacity-100" />
           <div className="digital-grid absolute inset-0 z-20" />
-          <div className="data-flow absolute inset-0 z-30" />
+          <div className="data-flow absolute inset-0 z-30 group-hover:opacity-30" />
+          
           <motion.img
             src={project.image}
             alt={project.title}
-            className="object-cover h-full w-full transform transition-transform duration-500 group-hover:scale-110"
+            className="object-cover h-full w-full transform transition-transform duration-700"
+            initial={false}
+            animate={{ scale: isModalOpen ? 1.1 : 1 }}
             loading="lazy"
           />
           
@@ -98,27 +155,44 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ project }) => {
           </div>
           
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            initial={false}
+            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"
+            variants={overlayVariants}
           >
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              <h3 className="text-xl font-bold mb-2 text-white">{project.title}</h3>
-              <p className="text-gray-200 mb-4">{project.description}</p>
+              <motion.h3 
+                className="text-xl font-bold mb-2 text-white"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                {project.title}
+              </motion.h3>
+              <motion.p 
+                className="text-gray-200 mb-4"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {project.description}
+              </motion.p>
               
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag, index) => (
-                  <span 
+                  <motion.span 
                     key={index}
                     className="text-xs bg-primary-800/50 backdrop-blur-sm px-2 py-1 rounded-full text-primary-200"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1 * index }}
                   >
                     {tag}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {isModalOpen && (
@@ -135,29 +209,40 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ project }) => {
             aria-modal="true"
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="bg-primary-900 rounded-xl overflow-hidden max-w-4xl w-full max-h-[90vh] relative"
             >
-              <button
+              <motion.button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors text-white z-10"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 aria-label="Close modal"
               >
                 <X size={24} />
-              </button>
+              </motion.button>
 
-              <div className="h-[300px] md:h-[400px] relative">
-                <img
+              <div className="h-[300px] md:h-[400px] relative overflow-hidden">
+                <motion.img
                   src={project.image}
                   alt={project.title}
                   className="w-full h-full object-cover"
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-900 to-transparent opacity-50" />
               </div>
 
-              <div className="p-6">
+              <motion.div 
+                className="p-6"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
                 <h3 id={`modal-${project.id}-title`} className="text-2xl font-bold mb-4 text-white">
                   {project.title}
                 </h3>
@@ -165,24 +250,35 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({ project }) => {
 
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tags.map((tag, index) => (
-                    <span
+                    <motion.span
                       key={index}
                       className="px-3 py-1 bg-primary-800 rounded-full text-sm text-primary-200"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.1 * index }}
                     >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
 
                 <div className="flex gap-4">
-                  <button className="px-6 py-2 bg-accent-600 hover:bg-accent-500 rounded-md transition-colors text-white">
+                  <motion.button 
+                    className="px-6 py-2 bg-accent-600 hover:bg-accent-500 rounded-md transition-colors text-white"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     View Live
-                  </button>
-                  <button className="px-6 py-2 border border-accent-600 hover:bg-accent-600/10 rounded-md transition-colors text-white">
+                  </motion.button>
+                  <motion.button 
+                    className="px-6 py-2 border border-accent-600 hover:bg-accent-600/10 rounded-md transition-colors text-white"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     Source Code
-                  </button>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}

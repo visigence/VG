@@ -62,8 +62,16 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
         glow: {
-          '0%': { textShadow: '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #0073e6, 0 0 20px #0073e6' },
-          '100%': { textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0073e6, 0 0 40px #0073e6' },
+          '0%': { 
+            textShadow: '0 0 5px rgba(134, 70, 242, 0.5), 0 0 10px rgba(134, 70, 242, 0.3)' 
+          },
+          '100%': { 
+            textShadow: '0 0 10px rgba(134, 70, 242, 0.8), 0 0 20px rgba(134, 70, 242, 0.5)' 
+          },
+        },
+        pulse: {
+          '0%, 100%': { opacity: 1 },
+          '50%': { opacity: 0.5 },
         },
       },
     },

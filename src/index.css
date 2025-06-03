@@ -40,6 +40,36 @@
     @apply neon-border transform scale-[1.02] z-10;
   }
 
+  .shimmer-overlay {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(
+      45deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 200%;
+    animation: shimmer 3s infinite linear;
+  }
+
+  .digital-grid {
+    @apply absolute inset-0 opacity-20;
+    background-image: linear-gradient(rgba(134, 70, 242, 0.3) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(134, 70, 242, 0.3) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: gridMove 20s linear infinite;
+  }
+
+  .data-flow {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(134, 70, 242, 0.4) 0%,
+      transparent 50%
+    );
+    animation: pulse 2s ease-in-out infinite;
+  }
+
   .service-card {
     position: relative;
     overflow: hidden;
@@ -66,6 +96,10 @@
     transform: rotate(180deg);
   }
 
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 10px rgba(134, 70, 242, 0.5));
+  }
+
   .subtle-pattern-overlay {
     background-image: radial-gradient(
       rgba(134, 70, 242, 0.1) 1px,
@@ -88,6 +122,22 @@
                 0 0 20px theme('colors.accent.500'), 
                 0 0 30px theme('colors.accent.500');
   }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% -200%; }
+  100% { background-position: 200% 200%; }
+}
+
+@keyframes gridMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(20px); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(0.8); }
 }
 
 @keyframes patternFloat {
@@ -118,6 +168,9 @@
     transition: none;
   }
 
+  .shimmer-overlay,
+  .digital-grid,
+  .data-flow,
   .subtle-pattern-overlay {
     animation: none;
   }
